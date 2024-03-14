@@ -1,0 +1,31 @@
+services:
+  server:
+    image: us-docker.pkg.dev/kraken-261806/kk/kkserver:kk_ver
+    deploy:
+      replicas: 2
+  controller:
+    image: us-docker.pkg.dev/kraken-261806/kk/kkcontroller:kk_ver
+  rq:
+    image: us-docker.pkg.dev/kraken-261806/kk/kkrq:kk_ver
+  clickhouse:
+    image: us-docker.pkg.dev/kraken-261806/kk/clickhouse-server:22.10.2.11.kk_ver
+  clickhouse-proxy:
+    image: us-docker.pkg.dev/kraken-261806/kk/kkchproxy:kk_ver
+  agent:
+    image: us-docker.pkg.dev/kraken-261806/kk/kkagent:kk_ver
+    deploy:
+      replicas: 3
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/snap/lxd/common/lxd/unix.socket:/var/snap/lxd/common/lxd/unix.socket
+  ui:
+    image: us-docker.pkg.dev/kraken-261806/kk/kkui:kk_ver
+
+networks:
+  db_net:
+    driver: overlay
+  web_net:
+    driver: overlay
+  lab_net:
+    driver: overlay
+    attachable: true
